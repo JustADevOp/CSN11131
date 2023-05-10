@@ -21,8 +21,8 @@ def main():
     x=7                                                     #Manually set x for testing
     y=(g**x)%p                                              #Calculated public key for testing.
 
-    lista_array=[]                                          #Create an array to hold recieved cyphered a values
-    listb_array=[]                                          #Create an array to hold recieved cyphered b values
+    lista_array=[]                                          #Create an array to hold recieved ciphered a values
+    listb_array=[]                                          #Create an array to hold recieved ciphered b values
 
     randomRounds=Cryptodome.Random.random.getrandbits(6)    #To simulate a varying number of systems sending data. 
     print("_____________________________")                  #Output formatting for visability
