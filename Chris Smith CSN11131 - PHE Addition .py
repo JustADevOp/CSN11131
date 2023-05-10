@@ -21,8 +21,8 @@ def main():
     x=7                                                     #Manually set x for testing
     y=(g**x)%p                                              #Calculated public key for testing.
 
-    lista_array=[]                                          #Create an array to hold recieved ciphered a values
-    listb_array=[]                                          #Create an array to hold recieved ciphered b values
+    lista_array=[]                                          #Create an array to hold recieved cyphered a values
+    listb_array=[]                                          #Create an array to hold recieved cyphered b values
 
     randomRounds=Cryptodome.Random.random.getrandbits(6)    #To simulate a varying number of systems sending data. 
     print("_____________________________")                  #Output formatting for visability
@@ -53,25 +53,27 @@ def calc_listRawData_array():                               #Test Function to ca
     return RawTotal                                         #Return the RawTotal Variable 
     
 
-def multia(lista):                                          #Function to take the values from lista_array (passed to this function as lista) and add multiply them together to create a=a1*a2*a3*a4... etc. Also counts the number of ciphertexts received to later calculate the Mean.
+def multia(lista,p):                                          #Function to take the values from lista_array (passed to this function as lista) and add multiply them together to create a=a1*a2*a3*a4... etc. Also counts the number of ciphertexts received to later calculate the Mean.
     aTotal=1                                                #Create the aTotal variable to hold the results of each calculation. Start at 1 so that the first a value to come out the lista_array is multiplied by 1 and gives its own value as the new aTotal.
     counter=0                                               #Create the counter variable to hold the count of ciphertexts processed. 
     for a in lista:                                         #Loop through all entries in the lista array 
         aTotal=aTotal*a                                     #Get the value of the aTotal and multiply it by the current a value take from lista, then store in the aTotal variable.
         counter=counter+1                                   #Get the value of counter and add one to it, then store in counter variable.
-    return aTotal, counter                                  #Return the total of the a values being multiplied as one value. aTotal = a = a1*a2*a3*a4... and the total number of ciphertexts received.
+    aTotal=aTotal%p                                         #Take the multiplication total and mod by p (prime).
+    return aTotal, counter                                  #Return the total of the a values being multiplied as one value. aTotal = a = (a1*a2*a3*a4...)mod p and the total number of ciphertexts received.
 
 
-def multib(listb):                                          #Function to take the values from listb_array (passed to this function as listb) and add multiply them together to create b=b1*b2*b3*b4... etc
+def multib(listb,p):                                          #Function to take the values from listb_array (passed to this function as listb) and add multiply them together to create b=b1*b2*b3*b4... etc
     bTotal=1                                                #Create the bTotal variable to hold the results of each calculation. Start at 1 so that the first a value to come out the listb_array is multiplied by 1 and gives its own value as the new bTotal.
     for b in listb:                                         #Loop through all entries in the listb array
         bTotal=bTotal*b                                     #Get the value of the bTotal and multiply it by the current a value take from listb, then store in the bTotal variable.
-    return bTotal                                           #Return the total of the b values being multiplied as one value. bTotal = b = b1*b2*b3*b4... 
+    bTotal=bTotal%p                                         #Take the multiplication total and mod by p (prime).
+    return bTotal                                           #Return the total of the b values being multiplied as one value. bTotal = b = (b1*b2*b3*b4...)mod p 
 
 
 def Decrpyt(lista_array, listb_array,x,g,p):                #Function to take the calculated a and b values from multia and multib functions, then bruteforce a check to find a match, after which this is divided by the count of ciphers recieved (as counted in multia3 function). Called by main function and passed lista_array, listb_array, Private key (x), generator (g) and the prime (p).
-    a,CiphersRecieved =multia(lista_array)                  #Call the function multia and pass it the lista_array which holds all the received a values. Returns the values a (all a values multiplied a = a1*a2*a3*a4...) and the total number of ciphers.
-    b=multib(listb_array)                                   #Call the function multib and pass it the listb_array which holds all the received b values. Returns the values b (all b values multiplied b = b1*b2*b3*b4...)
+    a,CiphersRecieved =multia(lista_array,p)                  #Call the function multia and pass it the lista_array which holds all the received a values. Returns the values a (all a values multiplied a = a1*a2*a3*a4...) and the total number of ciphers.
+    b=multib(listb_array,p)                                   #Call the function multib and pass it the listb_array which holds all the received b values. Returns the values b (all b values multiplied b = b1*b2*b3*b4...)
     m=(b*libnum.invmod(((a**x)%p),p)) % p                   #create m variable to hold the computed addition. This takes the b value (b = b1*b2*b3*b4...) and inverse mods the result of a (a = a1*a2*a3*a4...) to the power of private key x mod prime (p) by prime (p).
     print("_____________________________")                  #Output formatting for visability
     print("Resulting Cipher Text (m) ",m)                   #Print the result of the m calculation adding the ciphers together.
