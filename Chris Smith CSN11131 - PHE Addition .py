@@ -27,7 +27,7 @@ def main():
     randomRounds=Cryptodome.Random.random.getrandbits(6)    #To simulate a varying number of systems sending data. 
     print("_____________________________")                  #Output formatting for visability
     print("Number of submissions will be ",randomRounds)    #Print the number of rounds
-    print("-----------------------------")                #Output formatting for visability
+    print("-----------------------------")                  #Output formatting for visability
     for rounds in range (0,randomRounds):                   #For loop to create several cipher texts
         a,b =Enc(p,g,y)                                     #Call the Enc function & send the public key (p, g, y) - This function would be done by a remote system in real world. This function returns a and b ciphertext as a real remote system would.
         lista_array.append(a)                               #Save the a Value from the Enc function and save this cipher in the array
@@ -75,14 +75,14 @@ def Decrpyt(lista_array, listb_array,x,g,p):                #Function to take th
     m=(b*libnum.invmod(((a**x)%p),p)) % p                   #create m variable to hold the computed addition. This takes the b value (b = b1*b2*b3*b4...) and inverse mods the result of a (a = a1*a2*a3*a4...) to the power of private key x mod prime (p) by prime (p).
     print("_____________________________")                  #Output formatting for visability
     print("Resulting Cipher Text (m) ",m)                   #Print the result of the m calculation adding the ciphers together.
-    print("-----------------------------")                #Output formatting for visability
+    print("-----------------------------")                  #Output formatting for visability
     plainTextnumber=0                                       #Create plainTextnumber variable. This will be used to store each round of the brute force attempt to find a match of plaintext to the ciphertext.
     for i in range (1,10000000):                            #For every integer between 1 and 10000000 the program will take the integer and encrypt it. If the encrypted value of i matches the m value (ciphered result of additions) then i is the plaintext number of m.
         BruteforceAttempt=(g**i)%p                          #Create a variale to store the ciphered i integer. Take the integer i and cipher it by powering to the generator (g) and modding the result by the prime (p)
         if BruteforceAttempt==m:                            #Check to see if the BruteforceAttempt variable storing the ciphered i value matches the message m.
             print("_____________________________")          #Output formatting for visability            
             print("Deciphered Number is = ",i)              #Print to report the match was found and print the value of i .
-            print("-----------------------------")        #Output formatting for visability
+            print("-----------------------------")          #Output formatting for visability
             plainTextnumber=i                               #set the variable plainTextnumber previously created and store the value of i.
             break                                           #End the for loop.
         else:                                               #If the last check of BruteforceAttempt against message (m) didn't match, then add 1 to the value i and start the loop again.
@@ -90,11 +90,11 @@ def Decrpyt(lista_array, listb_array,x,g,p):                #Function to take th
     addedRaw_Data=calc_listRawData_array()                  #Create a new variable addedRaw_Data and call the function calc_listRawData_array. This is a testing function and would not exist in the real world. This function takes the plaintext values from listRawData_array and adds them together and returns the value. This exists only to check the deciphered output matches the raw data addition.
     print("_____________________________")                  #Output formatting for visability.
     print("Rawdata is ", addedRaw_Data)                     #Print the Test data additions. This would not exist in the real world and is only here for testing / verification.
-    print("-----------------------------")                #Output formatting for visability.
+    print("-----------------------------")                  #Output formatting for visability.
     MeanAverage=plainTextnumber//CiphersRecieved            #Create a new variable MeanAverage to store the result of plainTextnumber (the plaintext value of m) divided to a round figure by CyphersRecieved (Ciphers were counted in function multia).
     print("_____________________________")                  #Output formatting for visability.
     print("Deciphered Number/Number of Ciphers")            #Print the Calculation explained.
     print(plainTextnumber,"/",CiphersRecieved,"=",MeanAverage)#Print the calculation
-    print("-----------------------------")                #Output formatting for visability
+    print("-----------------------------")                  #Output formatting for visability
 if __name__ in "__main__":                                  #On start look for function main.
     main()                                                  #If main exists run the main function.
