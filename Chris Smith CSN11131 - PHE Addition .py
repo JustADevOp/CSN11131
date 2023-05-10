@@ -12,7 +12,7 @@ def main():
     key = ElGamal.generate(256, Random.new().read)          #Using the Elgamal library from Crytodome, create a key with a 256bit prime and save it in the object "key"
     public_key = key.publickey()                            #From "key", take the public key and store in "public_key"
     #g = key.g                                              #From the "key" object extract the generator value (g). Use this if you want to use a generated generator rather than a static value set below. 
-    #p = key.p                                              #From the "key" object extract the Prime value (p). Use this if you want to use a generated Prime greater than 128 bit instead of the static value set below. Warning, this will increase compute time.
+    #p = key.p                                              #From the "key" object extract the Prime value (p). Use this if you want to use a generated Prime greater than 128 bit instead of the static value set below. WARNING- this will increase compute time.
     #x = key.x                                              #From the "key" object extract the private key value (x). Use this if you want to use a generated x rather than a static value set below. 
     #y = public_key.y                                       #From the "key" object extract the public key value (y). Use this if you want to use a generated y rather than a static value set below. 
 
@@ -38,7 +38,7 @@ def main():
 
 
 def Enc(p,g,y):                                             #Encryption function, takes the p, g and y values from main(). It takes a message, ciphers it and then returns those. This simulates a remote system.
-    m=Cryptodome.Random.random.randrange(1, 25, 1)          #Using the Cryptodome library select a random value between 1 and 25 to be the message (m). In real world this would either be manually entered or taken from a database. Randomly creating integer to be ciphers allows for better testing as will be different each loop of this function.
+    m=Cryptodome.Random.random.randrange(1, 100, 1)         #Using the Cryptodome library select a random value between 1 and 100 to be the message (m). In real world this would either be manually entered or taken from a database. Randomly creating integer to be ciphers allows for better testing as will be different each loop of this function.
     k=Cryptodome.Random.random.getrandbits(16)              #Create a random number of 16 bit length which will be used to cipher the message (m).
     a=(g**k)%p                                              #Create the "a" value by taking g and powering to the k value (random value), then muliply by the result of generator to power of the mesage (m), finally mod the result by the prime (p)
     b=((y**k)*(g**m))%p                                     #Cipher for additition, this differs to normal ElGamal Ciphering. Create the "b" value by taking the public key (y) to the power of the random value (k), then mulitply this by the generator (g) to the power of the message (m), finally mod the result by the prime (p)
