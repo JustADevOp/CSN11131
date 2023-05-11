@@ -9,10 +9,10 @@ listRawData_array=[]                                        #A global array for 
 def main(): 
     key = ElGamal.generate(256, Random.new().read)          #Using the Elgamal library from Crytodome, create a key with a 256bit prime and save it in the object "key"
     public_key = key.publickey()                            #From "key", take the public key and store in "public_key"
-    #g = key.g                                               #From the "key" object extract the generator value (g). Use this if you want to use a generated generator rather than a static value set below. 
-    #p = key.p                                               #From the "key" object extract the Prime value (p). Use this if you want to use a generated Prime greater than 128 bit instead of the static value set below. WARNING- this will increase compute time.
-    #x = key.x                                               #From the "key" object extract the private key value (x). Use this if you want to use a generated x rather than a static value set below. 
-    #y = public_key.y                                        #From the "key" object extract the public key value (y). Use this if you want to use a generated y rather than a static value set below. 
+    #g = key.g                                              #From the "key" object extract the generator value (g). Use this if you want to use a generated generator rather than a static value set below. 
+    #p = key.p                                              #From the "key" object extract the Prime value (p). Use this if you want to use a generated Prime greater than 128 bit instead of the static value set below. WARNING- this will increase compute time.
+    #x = key.x                                              #From the "key" object extract the private key value (x). Use this if you want to use a generated x rather than a static value set below. 
+    #y = public_key.y                                       #From the "key" object extract the public key value (y). Use this if you want to use a generated y rather than a static value set below. 
 
     g=5                                                     #Manaully set g for testing
     p=9223372036854775807                                   #Manually set prime for testing
