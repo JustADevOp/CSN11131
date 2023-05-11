@@ -1,9 +1,7 @@
 #Imports
-import Cryptodome                                          #https://pycryptodome.readthedocs.io/en/latest/src/installation.html
 from Cryptodome import Random                              #https://pycryptodome.readthedocs.io/en/latest/src/random/random.html?highlight=Random
 from Cryptodome.PublicKey import ElGamal                   #https://pycryptodome.readthedocs.io/en/latest/src/public_key/elgamal.html?highlight=Elgamal#Crypto.PublicKey.ElGamal.ElGamalKey.publickey
 import libnum                                              #https://pypi.org/project/libnum/
-
 #End Imports
 
 listRawData_array=[]                                        #A global array for testing. To check the plaintext decyphered from ciphertexts in the Decrypt function is correct the plaintext inputs from Enc function are saved here. In a real world system this would not exist.
@@ -11,10 +9,10 @@ listRawData_array=[]                                        #A global array for 
 def main(): 
     key = ElGamal.generate(256, Random.new().read)          #Using the Elgamal library from Crytodome, create a key with a 256bit prime and save it in the object "key"
     public_key = key.publickey()                            #From "key", take the public key and store in "public_key"
-    #g = key.g                                              #From the "key" object extract the generator value (g). Use this if you want to use a generated generator rather than a static value set below. 
-    #p = key.p                                              #From the "key" object extract the Prime value (p). Use this if you want to use a generated Prime greater than 128 bit instead of the static value set below. WARNING- this will increase compute time.
-    #x = key.x                                              #From the "key" object extract the private key value (x). Use this if you want to use a generated x rather than a static value set below. 
-    #y = public_key.y                                       #From the "key" object extract the public key value (y). Use this if you want to use a generated y rather than a static value set below. 
+    #g = key.g                                               #From the "key" object extract the generator value (g). Use this if you want to use a generated generator rather than a static value set below. 
+    #p = key.p                                               #From the "key" object extract the Prime value (p). Use this if you want to use a generated Prime greater than 128 bit instead of the static value set below. WARNING- this will increase compute time.
+    #x = key.x                                               #From the "key" object extract the private key value (x). Use this if you want to use a generated x rather than a static value set below. 
+    #y = public_key.y                                        #From the "key" object extract the public key value (y). Use this if you want to use a generated y rather than a static value set below. 
 
     g=5                                                     #Manaully set g for testing
     p=9223372036854775807                                   #Manually set prime for testing
@@ -24,7 +22,7 @@ def main():
     lista_array=[]                                          #Create an array to hold recieved cyphered a values
     listb_array=[]                                          #Create an array to hold recieved cyphered b values
 
-    randomRounds=Cryptodome.Random.random.getrandbits(6)    #To simulate a varying number of systems sending data. 
+    randomRounds=Random.random.getrandbits(6)               #To simulate a varying number of systems sending data. 
     print("_____________________________")                  #Output formatting for visability
     print("Number of submissions will be ",randomRounds)    #Print the number of rounds
     print("-----------------------------")                  #Output formatting for visability
@@ -38,8 +36,8 @@ def main():
 
 
 def Enc(p,g,y):                                             #Encryption function, takes the p, g and y values from main(). It takes a message, ciphers it and then returns those. This simulates a remote system.
-    m=Cryptodome.Random.random.randrange(1, 100, 1)         #Using the Cryptodome library select a random value between 1 and 100 to be the message (m). In real world this would either be manually entered or taken from a database. Randomly creating integer to be ciphers allows for better testing as will be different each loop of this function.
-    k=Cryptodome.Random.random.getrandbits(16)              #Create a random number of 16 bit length which will be used to cipher the message (m).
+    m=Random.random.randrange(1, 100, 1)                    #Using the Cryptodome library select a random value between 1 and 100 to be the message (m). In real world this would either be manually entered or taken from a database. Randomly creating integer to be ciphers allows for better testing as will be different each loop of this function.
+    k=Random.random.getrandbits(16)                         #Create a random number of 16 bit length which will be used to cipher the message (m).
     a=(g**k)%p                                              #Create the "a" value by taking g and powering to the k value (random value), then muliply by the result of generator to power of the mesage (m), finally mod the result by the prime (p)
     b=((y**k)*(g**m))%p                                     #Cipher for additition, this differs to normal ElGamal Ciphering. Create the "b" value by taking the public key (y) to the power of the random value (k), then mulitply this by the generator (g) to the power of the message (m), finally mod the result by the prime (p)
     listRawData_array.append(m)                             #For Testing purposes, log the raw input data into the Global array for later addition + compare to decyphered data. In a real world setup this would not exist.
@@ -57,7 +55,7 @@ def multia(lista,p):                                        #Function to take th
     aTotal=1                                                #Create the aTotal variable to hold the results of each calculation. Start at 1 so that the first a value to come out the lista_array is multiplied by 1 and gives its own value as the new aTotal.
     counter=0                                               #Create the counter variable to hold the count of ciphertexts processed. 
     for a in lista:                                         #Loop through all entries in the lista array 
-        aTotal=aTotal*a                                     #Get the value of the aTotal and multiply it by the current a value take from lista, then store in the aTotal variable.
+        aTotal=aTotal*int(a)                                #Get the value of the aTotal and multiply it by the current a value take from lista, then store in the aTotal variable.
         counter=counter+1                                   #Get the value of counter and add one to it, then store in counter variable.
     aTotal=aTotal%p                                         #Take the multiplication total and mod by p (prime).
     return aTotal, counter                                  #Return the total of the a values being multiplied as one value. aTotal = a = (a1*a2*a3*a4...)mod p and the total number of ciphertexts received.
@@ -66,12 +64,15 @@ def multia(lista,p):                                        #Function to take th
 def multib(listb,p):                                        #Function to take the values from listb_array (passed to this function as listb) and add multiply them together to create b=b1*b2*b3*b4... etc
     bTotal=1                                                #Create the bTotal variable to hold the results of each calculation. Start at 1 so that the first a value to come out the listb_array is multiplied by 1 and gives its own value as the new bTotal.
     for b in listb:                                         #Loop through all entries in the listb array
-        bTotal=bTotal*b                                     #Get the value of the bTotal and multiply it by the current a value take from listb, then store in the bTotal variable.
+        bTotal=bTotal*int(b)                                #Get the value of the bTotal and multiply it by the current a value take from listb, then store in the bTotal variable.
     bTotal=bTotal%p                                         #Take the multiplication total and mod by p (prime).
     return bTotal                                           #Return the total of the b values being multiplied as one value. bTotal = b = (b1*b2*b3*b4...)mod p 
 
 
-def Decrpyt(lista_array, listb_array,x,g,p):                #Function to take the calculated a and b values from multia and multib functions, then bruteforce a check to find a match, after which this is divided by the count of ciphers recieved (as counted in multia3 function). Called by main function and passed lista_array, listb_array, Private key (x), generator (g) and the prime (p).
+def Decrpyt(lista_array, listb_array,X,G,P):                #Function to take the calculated a and b values from multia and multib functions, then bruteforce a check to find a match, after which this is divided by the count of ciphers recieved (as counted in multia3 function). Called by main function and passed lista_array, listb_array, Private key (x), generator (g) and the prime (p).
+    x=int(X)                                                #Incase the ElGamal generator is used, the value needs converted to int.
+    g=int(G)                                                #Incase the ElGamal generator is used, the value needs converted to int.
+    p=int(P)                                                #Incase the ElGamal generator is used, the value needs converted to int.
     a,CiphersRecieved =multia(lista_array,p)                #Call the function multia and pass it the lista_array which holds all the received a values. Returns the values a (all a values multiplied a = a1*a2*a3*a4...) and the total number of ciphers.
     b=multib(listb_array,p)                                 #Call the function multib and pass it the listb_array which holds all the received b values. Returns the values b (all b values multiplied b = b1*b2*b3*b4...)
     m=(b*libnum.invmod(((a**x)%p),p)) % p                   #create m variable to hold the computed addition. This takes the b value (b = b1*b2*b3*b4...) and inverse mods the result of a (a = a1*a2*a3*a4...) to the power of private key x mod prime (p) by prime (p).
