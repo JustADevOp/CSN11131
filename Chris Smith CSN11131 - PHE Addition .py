@@ -7,7 +7,7 @@ import libnum                                              #https://pypi.org/pro
 listRawData_array=[]                                        #A global array for testing. To check the plaintext decyphered from ciphertexts in the Decrypt function is correct the plaintext inputs from Enc function are saved here. In a real world system this would not exist.
 
 def main(): 
-    key = ElGamal.generate(256, Random.new().read)          #Using the Elgamal library from Crytodome, create a key with a 256bit prime and save it in the object "key"
+    key = ElGamal.generate(161, Random.new().read)          #Using the Elgamal library from Crytodome, create a key with a minimim 161bit prime and save it in the object "key"
     public_key = key.publickey()                            #From "key", take the public key and store in "public_key"
     #g = key.g                                              #From the "key" object extract the generator value (g). Use this if you want to use a generated generator rather than a static value set below. 
     #p = key.p                                              #From the "key" object extract the Prime value (p). Use this if you want to use a generated Prime greater than 128 bit instead of the static value set below. WARNING- this will increase compute time.
