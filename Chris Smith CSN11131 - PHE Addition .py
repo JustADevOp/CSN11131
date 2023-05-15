@@ -1,3 +1,6 @@
+#The code in this implementation was written by myself referencing to user docs for Cyrptodome and to https://replit.com/@billbuchanan/elgamaladd#main.py for 
+#line 81 of this code.
+
 #Imports
 from Cryptodome import Random                              #https://pycryptodome.readthedocs.io/en/latest/src/random/random.html?highlight=Random
 from Cryptodome.PublicKey import ElGamal                   #https://pycryptodome.readthedocs.io/en/latest/src/public_key/elgamal.html?highlight=Elgamal#Crypto.PublicKey.ElGamal.ElGamalKey.publickey
@@ -75,7 +78,7 @@ def Decrpyt(lista_array, listb_array,X,G,P):                #Function to take th
     p=int(P)                                                #Incase the ElGamal generator is used, the value needs converted to int.
     a,CiphersRecieved =multia(lista_array,p)                #Call the function multia and pass it the lista_array which holds all the received a values. Returns the values a (all a values multiplied a = a1*a2*a3*a4...) and the total number of ciphers.
     b=multib(listb_array,p)                                 #Call the function multib and pass it the listb_array which holds all the received b values. Returns the values b (all b values multiplied b = b1*b2*b3*b4...)
-    m=(b*libnum.invmod(((a**x)%p),p)) % p                   #create m variable to hold the computed addition. This takes the b value (b = b1*b2*b3*b4...) and inverse mods the result of a (a = a1*a2*a3*a4...) to the power of private key x mod prime (p) by prime (p).
+    m=(b*libnum.invmod(((a**x)%p),p)) % p                   #Referenced from https://replit.com/@billbuchanan/elgamaladd#main.py #create m variable to hold the computed addition. This takes the b value (b = b1*b2*b3*b4...) and inverse mods the result of a (a = a1*a2*a3*a4...) to the power of private key x mod prime (p) by prime (p).
     print("_____________________________")                  #Output formatting for visability
     print("Resulting Cipher Text (m) ",m)                   #Print the result of the m calculation adding the ciphers together.
     print("-----------------------------")                  #Output formatting for visability
