@@ -1,5 +1,7 @@
+#Created by Christopher Smith 40612917 for module CSN11131. 
+#Related Paper title "Supporting Mental Health Services Using Homomorphic Encryption"
 #The code in this implementation was written by myself referencing to user docs for Cyrptodome and to https://replit.com/@billbuchanan/elgamaladd#main.py for 
-#line 81 of this code.
+#line 83 of this code.
 
 #Imports
 from Cryptodome import Random                              #https://pycryptodome.readthedocs.io/en/latest/src/random/random.html?highlight=Random
